@@ -1,0 +1,22 @@
+{
+  "name": "ln-challenge",
+  "version": "1.0.0",
+  "description": "La Nacion Technical Chalenge",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RocioZelaya/LN-Challenge.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RocioZelaya/LN-Challenge/issues"
+  },
+  "homepage": "https://github.com/RocioZelaya/LN-Challenge#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "@types/node": "^22.15.2"
+  }
+}
