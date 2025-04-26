@@ -17,6 +17,10 @@
   "homepage": "https://github.com/RocioZelaya/LN-Challenge#readme",
   "devDependencies": {
     "@playwright/test": "^1.52.0",
-    "@types/node": "^22.15.2"
+    "@types/node": "^22.15.2",
+    "prettier": "^3.5.3"
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0"
   }
 }
