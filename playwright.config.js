@@ -5,7 +5,7 @@ import { playwrightConfig } from './config';
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 export default defineConfig({
-  testDir: './tests',
+  testDir: playwrightConfig.testDir,
   fullyParallel: playwrightConfig.fullyParallel,
   forbidOnly: playwrightConfig.forbidOnly,
   retries: playwrightConfig.retries,
