@@ -55,16 +55,12 @@ export class Homepage {
     }
 
     async navigateToSection(section) {
-        if (section) {
-            const sectionLocator = this.page.locator('[class="nav"]').locator(`a[title="${navigateTo}"]`);
+            const sectionLocator = this.page.locator('[class="nav"]').locator(`a[title="${section}"]`);
             await sectionLocator.click();
-        }
-        await sectionLocator.click();
     }
 
     async clickOnSearchIcon() {
         const searchIcon = this.page.locator('[title="Ir al buscador"]');
-        await expect (searchIcon).toBeVisible();
         await searchIcon.click();
     }
 
@@ -74,42 +70,37 @@ export class Homepage {
 
     async clickOnNotificationBell() {
         const notificationBell = this.page.locator('[title="Abrir Notificaciones"]');
-        expect(notificationBell).toBeVisible();
         await notificationBell.click();
     }
 
     async clickOnLoginButton() {
         const loginButton = this.page.getByRole('button', { name: 'INICIAR SESIÓN' });
-        expect(loginButton).toBeVisible();
         await loginButton.click();
     }
 
     async clickOnSubscriptionButton() {
         const subscriptionButton = this.page.getByRole('button', { name: '¡La información clave a un' });
-        expect(subscriptionButton).toBeVisible();
         await subscriptionButton.click();
     }
 
     async clickOnLNGamesButton() {
         const lnButton = this.page.getByRole('link', { name: 'LN Juegos', exact: true });
-        expect(lnButton).toBeVisible();
         await lnButton.click();
     }
 
     async clickOnSubscriptorsButton() {
         const subscriptorsButton = this.page.getByRole('link', { name: 'Suscriptores', exact: true });
-        expect(subscriptorsButton).toBeVisible();
         await subscriptorsButton.click();
     }
 
     async clickOnNewsletterButton() {
         const newsletterButton = this.page.getByRole('link', { name: 'Newsletters' });
-        expect(newsletterButton).toBeVisible();
         await newsletterButton.click();
     }
     
 
     //footer
+
 
 
     //Main Note
