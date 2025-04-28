@@ -1,9 +1,8 @@
 import { Page } from "playwright";
-import { expect } from "@playwright/test";
-
 /**
  * @class Homepage
  * @description Represents the homepage and provides methods to interact with it.
+ * @param {Page} page - The Playwright page instance.
  */
 
 export class Homepage {
@@ -11,11 +10,8 @@ export class Homepage {
     constructor(page) {
         this.page = page;
     }    
-
-    /**
-     * @param {Page} page - The Playwright page instance.
-    */
     
+   //header
 
     dollarTitleValues = [
         "Dólar oficial",
@@ -24,7 +20,7 @@ export class Homepage {
         "Dólar CCL",
         "Dólar MEP"
     ];
-
+    
     /**
      * Locates the overall header on the page.
      * @returns {Promise<void>}
@@ -34,7 +30,6 @@ export class Homepage {
      * @returns {Promise<{dollarHref: string, dollarValue: string}>}
      */
 
-    //header
 
     async getHeaderDollarValueAndHREF(titleValue) {
 
@@ -79,7 +74,7 @@ export class Homepage {
     }
 
     async clickOnSubscriptionButton() {
-        const subscriptionButton = this.page.getByRole('button', { name: '¡La información clave a un' });
+        const subscriptionButton = this.page.locator('[id="btnsuscribite"]');
         await subscriptionButton.click();
     }
 
@@ -97,13 +92,51 @@ export class Homepage {
         const newsletterButton = this.page.getByRole('link', { name: 'Newsletters' });
         await newsletterButton.click();
     }
+
+    async getExpandSectionsButton() {
+        return this.page.getByRole('button', { name: 'SECCIONES' });
+    }
+
+    async getSearchButton() {
+        return this.page.locator('[title="Ir al buscador"]');
+    }
+
+    async getNotificationBellButton() {
+        return this.page.locator('[title="Abrir Notificaciones"]');
+    }
     
+    async getLoginButton() {
+        return this.page.getByRole('button', { name: 'INICIAR SESIÓN' });
+    }
 
-    //footer
-
-
-
+    async getSubscriptionButton() {
+        return this.page.locator('[id="btnsuscribite"]')
+    }
+    
     //Main Note
 
+    async getMainNote() {
+
+        const contentLocator = await this.page.locator('[class="ln-opening-container"]');
+
+        const mainNote = await contentLocator.getByRole('article').first();
+        const mainNoteTitle = await mainNote.locator('h1.title');
+        const mainNoteLink = await mainNote.getAttribute('data-mrf-link');
+
+        const mainNoteImage = await mainNote.locator('picture img');
+        const mainNoteVideo = await mainNote.locator('[class="ln-video"]');
+
+        let mainNoteMedia = null;
+
+        if (await mainNoteImage.isVisible()) {
+            mainNoteMedia = await mainNoteImage;
+        } else if (await mainNoteVideo.isVisible()) {
+            mainNoteMedia = await mainNoteVideo;
+        } else {
+            throw new Error("No media found for the main note.");
+        }
+
+        return { mainNote, mainNoteLink, mainNoteTitle, mainNoteMedia };
+    }
 
 }

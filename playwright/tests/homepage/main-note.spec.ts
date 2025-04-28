@@ -1,21 +1,24 @@
 import { test, expect } from "@playwright/test";
 import { Homepage } from "../../pages/Homepage";
+import { Common } from "../../pages/Common";
 
 test.beforeEach(async ({ page }) => {
-    await page.goto("https://www.lanacion.com.ar/");
+    const common = new Common(page);
+    await page.goto("https://www.lanacion.com.ar/",{ waitUntil: "domcontentloaded" });
+    await common.validateResourceRequests();
     await expect(page).toHaveTitle(/Últimas noticias de Argentina y el mundo - LA NACION/);
+    await common.ifAdThenClose();
 });
 
 test("Homepage - Main Note", async ({ page }) => {
+    
+    const homepage = new Homepage(page);
 
-    const contentLocator = page.locator('[data-section="apertura"]');
-    const mainNote = contentLocator.locator('[data-type="article"]').first();
-    const mainNoteTitle = mainNote.locator('[data-type="title"]');
-    const mainNoteImage = mainNote.locator('[data-type="image"]');
+    const mainNote = await homepage.getMainNote();
 
-    await expect(mainNote).toBeVisible();
-    await expect(mainNoteTitle).toBeVisible();
-    await expect(mainNoteTitle).toHaveAttribute("href", /https:\/\/www.lanacion.com.ar\/.+/);
-    await expect(mainNoteImage).toBeVisible();
+    await expect(mainNote.mainNote).toBeVisible();
+    await expect(await mainNote.mainNoteLink).toMatch(/https:\/\/www.lanacion.com.ar\/\S+/);
+    await expect(mainNote.mainNoteTitle).toBeVisible();
+    await expect(mainNote.mainNoteMedia).toBeVisible();
 
 });

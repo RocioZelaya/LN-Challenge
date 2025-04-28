@@ -1,9 +1,13 @@
 import { test, expect } from "@playwright/test";
 import { Homepage } from "../../pages/Homepage";
+import { Common } from "../../pages/Common";
 
 test.beforeEach(async ({ page }) => {
-    await page.goto("https://www.lanacion.com.ar/");
+    const common = new Common(page);
+    await page.goto("https://www.lanacion.com.ar/",{ waitUntil: "domcontentloaded" });
+    await common.validateResourceRequests();
     await expect(page).toHaveTitle(/Últimas noticias de Argentina y el mundo - LA NACION/);
+    await common.ifAdThenClose();
 });
 
 test("Homepage - Header - Logotype", async ({ page }) => {
@@ -39,7 +43,7 @@ test("Homepage - Header - Search Icon", async ({ page }) => {
         homepage.clickOnSearchIcon(),
         page.waitForSelector('[id="queryly_searchcontainer"]', { state: 'visible' })
     ]);
-    const searchInput = page.getByLabel('Search', { exact: true });
+    const searchInput = page.locator('#queryly_search_header').getByPlaceholder('Buscar...');
     await expect(searchInput).toBeVisible();
 
 });
