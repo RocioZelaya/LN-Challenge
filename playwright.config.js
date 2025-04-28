@@ -12,8 +12,8 @@ export default defineConfig({
   workers: playwrightConfig.workers,
   reporter: playwrightConfig.reporter,
   use: {
-    baseURL: playwrightConfig.baseUrl,
-    trace: playwrightConfig.trace,
+    baseURL: playwrightConfig.use.baseUrl,
+    trace: playwrightConfig.use.trace,
   },
 
   /* Configure projects for major browsers */

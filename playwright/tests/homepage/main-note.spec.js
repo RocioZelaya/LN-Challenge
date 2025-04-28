@@ -4,7 +4,7 @@ import { Common } from "../../pages/Common";
 
 test.beforeEach(async ({ page }) => {
     const common = new Common(page);
-    await page.goto("https://www.lanacion.com.ar/",{ waitUntil: "domcontentloaded" });
+    await page.goto("/",{ waitUntil: "domcontentloaded" });
     await common.validateResourceRequests();
     await expect(page).toHaveTitle(/Últimas noticias de Argentina y el mundo - LA NACION/);
     await common.ifAdThenClose();

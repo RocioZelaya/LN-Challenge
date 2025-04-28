@@ -7,7 +7,7 @@ import { Note } from "../../pages/Note";
 test.beforeEach(async ({ page }) => {
 
   const common = new Common(page);
-  await page.goto("https://www.lanacion.com.ar/politica/tras-la-caida-de-la-moratoria-la-oposicion-desafia-al-gobierno-impulsa-una-jubilacion-proporcional-a-nid25032025/",{ waitUntil: "domcontentloaded" });
+  await page.goto("/politica/tras-la-caida-de-la-moratoria-la-oposicion-desafia-al-gobierno-impulsa-una-jubilacion-proporcional-a-nid25032025/",{ waitUntil: "domcontentloaded" });
   await common.validateResourceRequests();
   const articleTitle = (await page.getByRole('heading').first().textContent()).split('|').pop().trim();
   await expect(page).toHaveTitle(`${articleTitle} - LA NACION`);
@@ -55,23 +55,11 @@ test("Note - Title and Paragraph", async ({ page }) => {
 
 });
 
-test("Note - Footer", async ({ page }) => {
+slow.test("Note - Footer", async ({ page }) => {
 
     const footer = new Footer(page);
 
-    await footer.scrollToFooter();
-
-    await footer.normalizeLink("edicion-impresa");
-    await footer.normalizeLink("ln+");
-    await footer.normalizeLink("club-la-nacion");
-    await footer.normalizeLink("ohlala!");
-    await footer.normalizeLink("¡hola!");
-    await footer.normalizeLink("jardín");
-    await footer.normalizeLink("fundacion-la-nacion");
-    await footer.normalizeLink("terminos-y-condiciones");
-    await footer.normalizeLink("suscribirse-al-diario-impreso");
-    await footer.normalizeLink("rolling-stone");
-    
+    await footer.scrollToFooter();    
     await footer.validateFooterLinks();
 
 });

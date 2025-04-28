@@ -1,4 +1,3 @@
-import { Page } from "playwright";
 /**
  * @class Note
  * @description Represents the note page and provides methods to interact with it.

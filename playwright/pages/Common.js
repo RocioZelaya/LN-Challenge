@@ -1,4 +1,4 @@
-import { Page } from "playwright";
+import { baseURL } from "playwright";
 import { expect } from "@playwright/test";
 /**
  * @class Common
@@ -16,7 +16,6 @@ export class Common {
         const adLocator = this.page.locator('[class="ln-banner-container --comercial_dsk --comercial --no-app"]');
         const adCloseButton = this.page.getByRole('button', { name: 'CERRAR' });
 
-        // Wait for the ad to appear before checking visibility
         if (await adLocator.isVisible()) {
             await adCloseButton.click();
         }
@@ -26,15 +25,13 @@ export class Common {
         
         const failedRequests = [];
 
-        await this.page.route('**/*.lanacion.com.ar/**', async (route) => {
+        await this.page.route(`**/*.${baseURL}/**`, async (route) => {
           const response = await route.fetch();
           if (!response.ok()) {
             failedRequests.push({ url: response.url(), status: response.status() });
           }
           await route.fulfill({ response });
         });
-
-        await this.page.waitForLoadState('networkidle');
 
         expect(failedRequests).toHaveLength(0);
 

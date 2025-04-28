@@ -1,4 +1,3 @@
-import { Page } from "playwright";
 /**
  * @class Homepage
  * @description Represents the homepage and provides methods to interact with it.

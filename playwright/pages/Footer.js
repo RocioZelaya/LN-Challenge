@@ -1,4 +1,4 @@
-import { Page } from "playwright";
+import { baseURL } from "playwright";
 import { expect } from '@playwright/test';
 
 export class Footer {
@@ -12,13 +12,37 @@ export class Footer {
     constructor(page) {
         this.page = page;
         this.footer = page.locator('[class="footer-container --no-app"]');
-        this.footerLinks = [
-            "Últimas noticias", "Política", "Economía", "El mundo", "Sociedad", "Opinión", "Deportes", "Lifestyle",
-            "Espectáculos", "Edición impresa", "LN+", "Club LA NACION", "OHLALÁ!", "¡HOLA!", "LIVING", "JARDÍN", 
-            "LUGARES", "ROLLING STONE", "Bonvivir", "Colecciones", "Máster en periodismo", "Fundación LA NACION", 
-            "Mapa del sitio", "Ayuda", "Atención al socio", "Términos y condiciones", "¿Cómo anunciar?", 
-            "Suscribirse al diario impreso"
-        ];
+        
+        this.footerConfig = {
+            "Últimas noticias": { pattern: "https://www.lanacion.com.ar/ultimas-noticias/" },
+            "Política": { pattern: "https://www.lanacion.com.ar/politica/" },
+            "Economía": { pattern: "https://www.lanacion.com.ar/economia/" },
+            "El mundo": { pattern: "https://www.lanacion.com.ar/el-mundo/" },
+            "Sociedad": { pattern: "https://www.lanacion.com.ar/sociedad/" },
+            "Opinión": { pattern: "https://www.lanacion.com.ar/opinion/" },
+            "Deportes": { pattern: "https://www.lanacion.com.ar/deportes/" },
+            "Lifestyle": { pattern: "https://www.lanacion.com.ar/lifestyle/" },
+            "Espectáculos": { pattern: "https://www.lanacion.com.ar/espectaculos/" },
+            "Edición impresa": { pattern: "https://edicionimpresa.lanacion.com.ar/" },
+            "LN+": { pattern: "https://lnmas.lanacion.com.ar/" },
+            "Club LA NACION": { pattern: "https://club.lanacion.com.ar/" },
+            "OHLALÁ!": { pattern: "https://www.somosohlala.com/" },
+            "¡HOLA!": { pattern: "https://www.lanacion.com.ar/revista-hola/" },
+            "LIVING": { pattern: "https://www.lanacion.com.ar/revista-living" },
+            "JARDÍN": { pattern: "https://www.lanacion.com.ar/revista-jardin" },
+            "LUGARES": { pattern: "https://www.lanacion.com.ar/revista-lugares" },
+            "ROLLING STONE": { pattern: "https://es.rollingstone.com/arg/" },
+            "Bonvivir": { pattern: "https://bonvivir.com/" },
+            "Colecciones": { pattern: "https://colecciones.lanacion.com.ar" },
+            "Máster en periodismo": { pattern: `https://www\\.utdt\\.edu/ver_contenido\\.php\\?id_contenido=1111&id_item_menu=2327.*` },
+            "Fundación LA NACION": { pattern: "https://fundacionlanacion.org.ar/" },
+            "Mapa del sitio": { pattern: "https://www.lanacion.com.ar/mapa-del-sitio/" },
+            "Ayuda": { pattern: "https://www.contacto.lanacion.com.ar/ayuda" },
+            "Atención al socio": { pattern: "https://club.lanacion.com.ar/ayuda/" },
+            "Términos y condiciones": { pattern: `https://www\\.contacto\\.lanacion\\.com\\.ar/tyc*` },
+            "¿Cómo anunciar?": { pattern: "https://www.lanacion.in/" },
+            "Suscribirse al diario impreso": { pattern: "https://suscripciones.lanacion.com.ar/suscribirme" }
+        };
     }
 
     async scrollToFooter() {
@@ -26,50 +50,13 @@ export class Footer {
         await expect(this.footer).toBeVisible();
     }
 
-    normalizeLink(link) {
-        let normalizedLink = link.replace(/\s+/g, '-').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-        const specialCases = {
-            "edicion-impresa": "edicionimpresa",
-            "ln+": "lnmas",
-            "club-la-nacion": "club",
-            "ohlala!": "ohlala",
-            "¡hola!": "hola",
-            "jardín": "jardin",
-            "fundacion-la-nacion": "fundacionlanacion",
-            "terminos-y-condiciones": "tyc",
-            "suscribirse-al-diario-impreso": "suscripciones",
-            "rolling-stone": "rollingstone"
-        };
-        return specialCases[normalizedLink] || normalizedLink;
-    }
-
     async validateFooterLinks() {
-        for (const link of this.footerLinks) {
-            const footerLink = this.footer.getByRole('link', { name: link, exact: true });
+        for (const [linkText, config] of Object.entries(this.footerConfig)) {
+            const footerLink = this.footer.getByRole('link', { name: linkText, exact: true });
             await expect(footerLink).toBeVisible();
 
-            const normalizedLink = this.normalizeLink(link);
             const href = await footerLink.getAttribute('href');
-
-            const regexPatterns = [
-                `https://www\\.lanacion\\.com\\.ar/${normalizedLink}/.*`,
-                `https://${normalizedLink}\\.lanacion\\.com\\.ar.*`,
-                `https://www\\.somos${normalizedLink}\\.com/.*`,
-                `https://${normalizedLink}\\.com/.*`,
-                `https://www\\.utdt\\.edu/ver_contenido\\.php\\?id_contenido=1111&id_item_menu=2327.*`,
-                `https://${normalizedLink}\\.org\\.ar/.*`,
-                `https://www\\.contacto\\.lanacion\\.com\\.ar/${normalizedLink}.*`,
-                `https://club\\.lanacion\\.com\\.ar/ayuda/.*`,
-                `https://www\\.contacto\\.lanacion\\.com\\.ar/${normalizedLink}.*`,
-                `https://www\\.lanacion\\.in/.*`,
-                `https://${normalizedLink}\\.lanacion\\.com\\.ar/suscribirme.*`,
-                `https://www\\.lanacion\\.com\\.ar/revista-${normalizedLink}/.*`,
-                `https://es\\.${normalizedLink}\\.com/arg/.*`
-            ];
-
-            const match = regexPatterns.some(pattern => new RegExp(pattern).test(href));
-            console.log(match ? `PASS: ${normalizedLink} has a valid href: ${href}` : `FAIL: ${normalizedLink} has invalid href: ${href}`);
-            expect(match).toBe(true);
+            expect(href).toMatch(new RegExp(config.pattern));
         }
     }
 }
