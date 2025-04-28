@@ -55,7 +55,7 @@ test("Note - Title and Paragraph", async ({ page }) => {
 
 });
 
-slow.test("Note - Footer", async ({ page }) => {
+test.slow("Note - Footer", async ({ page }) => {
 
     const footer = new Footer(page);
 
