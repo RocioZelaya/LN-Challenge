@@ -1,4 +1,3 @@
-import { baseURL } from "playwright";
 import { expect } from "@playwright/test";
 /**
  * @class Common
@@ -25,7 +24,7 @@ export class Common {
         
         const failedRequests = [];
 
-        await this.page.route(`**/*.${baseURL}/**`, async (route) => {
+        await this.page.route(`**/*.lanacion.com.ar/**`, async (route) => {
           const response = await route.fetch();
           if (!response.ok()) {
             failedRequests.push({ url: response.url(), status: response.status() });
