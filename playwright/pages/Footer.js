@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test';
 
-export class Footer {
+export class Footer extends Common {
 
     /**
      * @class Footer
@@ -45,7 +45,7 @@ export class Footer {
     }
 
     async scrollToFooter() {
-        await this.footer.scrollIntoViewIfNeeded();
+        await this.scrollTo(this.footer);
         await expect(this.footer).toBeVisible();
     }
 

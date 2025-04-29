@@ -20,6 +20,11 @@ export class Common {
         }
     }
 
+    async scrollTo(selector) {
+        const element = this.page.locator(selector);
+        await this.page.evaluate((el) => el.scrollIntoView(), element);
+    }
+
     async validateResourceRequests() {
         
         const failedRequests = [];
@@ -43,5 +48,5 @@ export class Common {
           } else {
             console.log('All requests were successful!');
           }
-      }
+    }
 }
