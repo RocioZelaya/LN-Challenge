@@ -1,4 +1,5 @@
 import { expect } from '@playwright/test';
+import { Common } from './Common';
 
 export class Footer extends Common {
 
